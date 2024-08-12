@@ -12,12 +12,12 @@ def run_script(script_name):
 def full_setup():
     """Run all scripts in the specified order for full reset."""
     scripts = [
-        'manage_variables.py',
-        'manage_keywords.py',
+        # 'manage_variables.py',
+        # 'manage_keywords.py',
         'cloudflare_bulk_delete_dns.py',
         'cloudflare_delete_api_tokens.py',
         'cloudflare_delete_tunnel.py',
-        'zerotier_delete_network.py',
+        # 'zerotier_delete_network.py',
         'terraform_workspace_delete_create.py'
     ]
     for script in scripts:
@@ -31,7 +31,7 @@ def main_menu():
         '1': ('Cloudflare Bulk Record Removal', 'cloudflare_bulk_delete_dns.py'),
         '2': ('Cloudflare API Removal', 'cloudflare_delete_api_tokens.py'),
         '3': ('Cloudflare Tunnel Removal', 'cloudflare_delete_tunnel.py'),
-        '4': ('Zerotier Network Removal', 'zerotier_delete_network.py'),
+        # '4': ('Zerotier Network Removal', 'zerotier_delete_network.py'),
         '5': ('Terraform Workspace Rebuild', 'terraform_workspace_delete_create.py'),
         '6': ('Manage Variables', 'manage_variables.py'),
         '7': ('Manage Keywords', 'manage_keywords.py'),
