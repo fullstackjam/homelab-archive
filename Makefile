@@ -56,3 +56,7 @@ docs:
 
 git-hooks:
 	pre-commit install
+
+console:
+	ansible-console \
+		--inventory metal/inventories/${env}.yml
