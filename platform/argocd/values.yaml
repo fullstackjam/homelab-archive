@@ -38,9 +38,9 @@ argocd-apps:
             repoURL: &repoURL https://github.com/fullstackjam/homelab
             revision: &revision master
             directories:
-              - path: system/*
               - path: platform/*
-              - path: apps/*
+              - path: kustomize/*
+              # - path: apps/*
       template:
         metadata:
           name: '{{path.basename}}'

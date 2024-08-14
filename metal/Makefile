@@ -15,6 +15,9 @@ cluster:
 		--inventory inventories/${env}.yml \
 		cluster.yml
 
+kubespray:
+	cd ../kubespray && ansible-playbook -i inventory/mycluster/hosts.yaml -u root -b cluster.yml
+
 console:
 	ansible-console \
 		--inventory inventories/${env}.yml
