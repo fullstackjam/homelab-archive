@@ -81,7 +81,7 @@ def generate_hosts_yaml(master_nodes, worker_nodes):
 
 # Step 4: Run Ansible Playbook
 def run_ansible_playbook():
-    run_command("ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml")
+    run_command("ansible-playbook -i inventory/mycluster/hosts.yaml -e kube_network_plugin=cilium --become --become-user=root cluster.yml")
 
 def fetch_and_modify_admin_conf(master_nodes):
     # Assuming the first master node is the control plane to fetch admin.conf
