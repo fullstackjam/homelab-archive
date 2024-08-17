@@ -1,5 +1,7 @@
 .POSIX:
 
+export KUBECONFIG = $(shell pwd)/../kubernetes/kubeconfig.yaml
+
 default: apply
 
 ~/.terraform.d/credentials.tfrc.json:

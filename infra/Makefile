@@ -1,6 +1,6 @@
 .POSIX:
 
-KUBECONFIG = $(shell pwd)/../kubernetes/kubeconfig.yaml
+export KUBECONFIG = $(shell pwd)/../kubernetes/kubeconfig.yaml
 
 .PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker patch-longhorn-service
 

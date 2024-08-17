@@ -1,7 +1,6 @@
 .POSIX:
 
-env ?= prod
-KUBECONFIG = $(shell pwd)/kubeconfig.yaml
+export KUBECONFIG = $(shell pwd)/kubeconfig.yaml
 
 default: boot
 
