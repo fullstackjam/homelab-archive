@@ -3,7 +3,7 @@
 env ?= prod
 
 
-default: boot prerequisites
+default: init
 
 boot: ~/.ssh/id_rsa
 	ansible-playbook \
