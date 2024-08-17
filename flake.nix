@@ -20,10 +20,10 @@
           packages = [
             ansible
             ansible-lint
-            bash
             bmake
             diffutils
             docker
+            docker-compose_1 # TODO upgrade to version 2
             dyff
             git
             go
@@ -39,8 +39,6 @@
             libisoburn
             neovim
             openssh
-            zsh
-            oh-my-zsh
             p7zip
             pre-commit
             shellcheck
@@ -61,19 +59,6 @@
               python-dotenv
             ]))
           ];
-
-          shellHook = ''
-            export SHELL=$(which zsh)
-            if [ -t 1 ]; then
-              exec zsh
-            fi
-            ZSH=$HOME/.oh-my-zsh
-            if [ -d "$ZSH" ]; then
-              export ZSH="$ZSH"
-              plugins=(git kubectl)
-              source $ZSH/oh-my-zsh.sh
-            fi
-          '';
         };
       }
     );
