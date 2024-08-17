@@ -39,3 +39,5 @@ gitea:
         ALLOWED_HOST_LIST: private
   redis-cluster:
     enabled: false
+  postgresql-ha:
+    enabled: false
