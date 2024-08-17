@@ -5,17 +5,20 @@
 KUBECONFIG = $(shell pwd)/bootstrap/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 
-default: platform
+default: metal kubernetes infra platform external smoke-test
 
 configure:
 	./scripts/configure
 	git status
 
-system:
-	make -C system
-
 metal:
 	make -C metal
+
+kubernetes:
+	make -C kubernetes
+
+infra:
+	make -C infra
 
 platform:
 	make -C platform
@@ -25,9 +28,6 @@ external:
 
 smoke-test:
 	make -C test filter=Smoke
-
-post-install:
-	@./scripts/hacks
 
 tools:
 	@docker run \
@@ -50,12 +50,6 @@ test:
 
 clean:
 	docker compose --project-directory ./metal/roles/pxe_server/files down
-
-docs:
-	mkdocs serve
-
-git-hooks:
-	pre-commit install
 
 console:
 	ansible-console \
