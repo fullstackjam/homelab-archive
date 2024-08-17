@@ -1,6 +1,7 @@
 .POSIX:
 
 export KUBECONFIG = $(shell pwd)/../kubernetes/kubeconfig.yaml
+KUBE_CONFIG_PATH = $(KUBECONFIG)
 
 default: apply
 
