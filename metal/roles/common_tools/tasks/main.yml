@@ -8,6 +8,10 @@
     - wget
     - git
     - zsh
+    - lm-sensors
+    - net-tools
+    - traceroute
+    - make
     - build-essential
     - apt-transport-https
     - ca-certificates
@@ -21,7 +25,11 @@
   loop:
     - curl
     - wget
+    - net-tools
+    - traceroute
     - git
+    - make
+    - lm-sensors
     - zsh
 
 - name: Install Development Tools group for Fedora
