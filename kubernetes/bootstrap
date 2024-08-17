@@ -86,9 +86,27 @@ def generate_hosts_yaml(master_nodes: dict, worker_nodes: dict):
         subprocess.run(["nvim", output_path], check=True)
         print(f"File {output_path} opened for editing in nvim.")
 
+def is_kubernetes_running():
+    try:
+        result = subprocess.run(["kubectl", "get", "nodes"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if result.returncode == 0 and "No resources found" not in result.stdout.decode():
+            print("Kubernetes is already running.")
+            return True
+        else:
+            print("Kubernetes is not running.")
+            return False
+    except FileNotFoundError:
+        print("kubectl command not found. Kubernetes might not be installed.")
+        return False
+
 # Step 4: Run Ansible Playbook
 def run_ansible_playbook():
-    run_command("ansible-playbook -i inventory/mycluster/hosts.yaml -e kube_network_plugin=cilium --become --become-user=root cluster.yml")
+    if not is_kubernetes_running():
+        print("Running Ansible Playbook to deploy Kubernetes...")
+        subprocess.run(["ansible-playbook", "-i", "inventory/mycluster/hosts.yaml",
+                        "-e", "kube_network_plugin=cilium", "--become", "--become-user=root", "cluster.yml"])
+    else:
+        print("Skipping Ansible Playbook as Kubernetes is already deployed.")
 
 def fetch_and_modify_admin_conf(master_nodes):
     # Assuming the first master node is the control plane to fetch admin.conf
