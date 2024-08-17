@@ -3,7 +3,7 @@
 env ?= prod
 export KUBECONFIG = $(shell pwd)/kubeconfig.yaml
 
-default: boot prerequisites kubespray
+default: boot prerequisites k8s
 
 boot: ~/.ssh/id_rsa
 	ansible-playbook \
@@ -15,9 +15,12 @@ prerequisites:
 		--inventory inventories/${env}.yml \
 		cluster.yml
 
-kubespray:
-	cd ../kubespray && ansible-playbook -i inventory/mycluster/hosts.yaml -u root -b cluster.yml
-
 console:
 	ansible-console \
 		--inventory inventories/${env}.yml
+
+clean:
+	cd kubespray &&	ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root reset.yml
+
+k8s:
+	python3 bootstrap

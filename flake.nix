@@ -9,8 +9,6 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        # TODO remove unfree after removing Terraform
-        # (Source: https://xeiaso.net/blog/notes/nix-flakes-terraform-unfree-fix)
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
@@ -22,10 +20,10 @@
           packages = [
             ansible
             ansible-lint
+            bash
             bmake
             diffutils
             docker
-            docker-compose_1 # TODO upgrade to version 2
             dyff
             git
             go
@@ -41,22 +39,38 @@
             libisoburn
             neovim
             openssh
+            zsh
+            oh-my-zsh
             p7zip
             pre-commit
             shellcheck
-            terraform # TODO replace with OpenTofu, Terraform is no longer FOSS
+            terraform
             yamllint
-
+            yq
             (python3.withPackages (p: with p; [
               jinja2
               kubernetes
               ansible
               mkdocs-material
               netaddr
+              jsonschema
+              jmespath
               pexpect
               rich
             ]))
           ];
+
+          shellHook = ''
+            export SHELL=$(which zsh)
+            if [ -t 1 ]; then
+              exec zsh
+            fi
+            ZSH=$HOME/.oh-my-zsh
+            if [ -d "$ZSH" ]; then
+              export ZSH="$ZSH"
+              source $ZSH/oh-my-zsh.sh
+            fi
+          '';
         };
       }
     );

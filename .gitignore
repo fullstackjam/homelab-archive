@@ -170,3 +170,5 @@ book/
 *.tgz
 *kubeconfig.yaml
 Chart.lock
+
+kubespray/

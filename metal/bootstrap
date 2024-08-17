@@ -1,0 +1,119 @@
+import os
+import yaml
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+import subprocess
+
+# Function to run shell commands
+def run_command(command):
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    # Stream output to the console in real-time
+    for line in iter(process.stdout.readline, b''):
+        print(line.decode(), end='')
+
+    process.stdout.close()
+    process.wait()
+
+    if process.returncode != 0:
+        raise Exception(f"Command failed with return code {process.returncode}")
+
+# Step 0: Pull the latest version of Kubespray with --depth=1 or clone if it doesn't exist
+def pull_kubespray():
+    if os.path.exists("kubespray"):
+        os.chdir("kubespray")
+        run_command("git pull --depth=1")
+    else:
+        run_command("git clone --depth=1 https://github.com/kubernetes-sigs/kubespray.git")
+        os.chdir("kubespray")
+
+# Step 1: Extract IPs and hostnames from prod.yaml
+def parse_prod_yaml():
+    inventory_path = os.path.join(os.getcwd(), '..', 'inventories', 'prod.yml')
+    with open(inventory_path, 'r') as file:
+        prod_data = yaml.safe_load(file)
+
+    master_nodes = {}
+    worker_nodes = {}
+
+    masters = prod_data.get('metal', {}).get('children', {}).get('masters', {}).get('hosts', {})
+    workers = prod_data.get('metal', {}).get('children', {}).get('workers', {}).get('hosts', {})
+
+    for host, details in masters.items():
+        master_nodes[host] = details['ansible_host']
+
+    for host, details in workers.items():
+        worker_nodes[host] = details['ansible_host']
+
+    return master_nodes, worker_nodes
+
+# Step 2: Copy sample inventory
+def copy_inventory():
+    run_command("cp -rfp inventory/sample inventory/mycluster")
+
+# Step 3: Generate hosts.yaml using Jinja2
+def generate_hosts_yaml(master_nodes, worker_nodes):
+    # Combine all nodes
+    all_hosts = {**master_nodes, **worker_nodes}
+
+    # Define the data structure for the template
+    template_data = {
+        "all_hosts": all_hosts,
+        "kube_control_plane_hosts": list(all_hosts.keys()),
+        "kube_node_hosts": list(all_hosts.keys()),
+        "etcd_hosts": list(all_hosts.keys()),
+    }
+
+    # Load Jinja2 template
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(os.getcwd(), '..')),
+        autoescape=select_autoescape(['yaml']),
+        trim_blocks=True,
+        lstrip_blocks=True
+    )
+    template = env.get_template('hosts.yaml.j2')
+
+    # Render template with data
+    rendered_hosts_yaml = template.render(template_data)
+
+    # Save the rendered hosts.yaml
+    output_path = os.path.join('inventory', 'mycluster', 'hosts.yaml')
+    with open(output_path, 'w') as file:
+        file.write(rendered_hosts_yaml)
+
+# Step 4: Run Ansible Playbook
+def run_ansible_playbook():
+    run_command("ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml")
+
+def fetch_and_modify_admin_conf(master_nodes):
+    # Assuming the first master node is the control plane to fetch admin.conf
+    control_plane = next(iter(master_nodes))
+    control_plane_ip = master_nodes[control_plane]
+
+    # Define the local path where the file will be saved
+    local_admin_conf = os.path.join(os.path.dirname(os.getcwd()), 'kubeconfig.yaml')
+
+    # SCP command to copy the file
+    scp_command = f"scp root@{control_plane_ip}:/etc/kubernetes/admin.conf {local_admin_conf}"
+    run_command(scp_command)
+
+    # Modify the admin.conf file locally to replace 127.0.0.1 with control_plane_ip
+    with open(local_admin_conf, 'r') as file:
+        config_data = file.read()
+
+    config_data = config_data.replace("127.0.0.1", control_plane_ip)
+
+    with open(local_admin_conf, 'w') as file:
+        file.write(config_data)
+
+    print(f"admin.conf has been modified and saved to {local_admin_conf}")
+
+def main():
+    pull_kubespray()
+    master_nodes, worker_nodes = parse_prod_yaml()
+    copy_inventory()
+    generate_hosts_yaml(master_nodes, worker_nodes)
+    run_ansible_playbook()
+    fetch_and_modify_admin_conf(master_nodes)
+
+if __name__ == "__main__":
+    main()
