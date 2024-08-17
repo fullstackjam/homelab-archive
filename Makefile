@@ -2,6 +2,8 @@
 .PHONY: *
 .EXPORT_ALL_VARIABLES:
 
+env ?= prod
+
 KUBECONFIG = $(shell pwd)/bootstrap/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 

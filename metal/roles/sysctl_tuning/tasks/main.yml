@@ -6,3 +6,4 @@
     - {name: "fs.inotify.max_queued_events", value: 16384}
     - {name: "fs.inotify.max_user_instances", value: 8192}
     - {name: "fs.inotify.max_user_watches", value: 524288}
+    - {name: "net.ipv4.ip_forward", value: 1}

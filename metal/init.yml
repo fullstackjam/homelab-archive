@@ -1,5 +1,5 @@
 - name: pre configure metal
   hosts: metal
   roles:
-    - prerequisites
-    - automatic_upgrade
+    - sysctl_tuning
+    - common_tools

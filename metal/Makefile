@@ -10,7 +10,7 @@ boot: ~/.ssh/id_rsa
 		--inventory inventories/${env}.yml \
 		boot.yml
 
-prerequisites:
+init:
 	ansible-playbook \
 		--inventory inventories/${env}.yml \
-		cluster.yml
+		init.yml
