@@ -17,7 +17,6 @@ def run_command(command):
     if process.returncode != 0:
         raise Exception(f"Command failed with return code {process.returncode}")
 
-# Step 0: Pull the latest version of Kubespray with --depth=1 or clone if it doesn't exist
 def pull_kubespray():
     if os.path.exists("kubespray"):
         os.chdir("kubespray")
@@ -28,7 +27,7 @@ def pull_kubespray():
 
 # Step 1: Extract IPs and hostnames from prod.yaml
 def parse_prod_yaml():
-    inventory_path = os.path.join(os.getcwd(), '..', 'inventories', 'prod.yml')
+    inventory_path = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), 'metal', 'inventories', 'prod.yml')
     with open(inventory_path, 'r') as file:
         prod_data = yaml.safe_load(file)
 

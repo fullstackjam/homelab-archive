@@ -21,3 +21,6 @@ plan: .terraform.lock.hcl
 
 apply: .terraform.lock.hcl namespaces
 	terraform apply -auto-approve
+
+clean:
+	cd cleanup && python3 cleanup.py

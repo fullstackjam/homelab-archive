@@ -57,6 +57,8 @@
               jmespath
               pexpect
               rich
+              requests
+              python-dotenv
             ]))
           ];
 
