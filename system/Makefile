@@ -1,6 +1,6 @@
 .POSIX:
 
-export KUBECONFIG = $(shell pwd)/../metal/kubeconfig.yaml
+export KUBECONFIG = $(shell pwd)/../bootstrap/kubeconfig.yaml
 
 .PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker patch-longhorn-service
 
