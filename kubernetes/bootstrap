@@ -50,16 +50,16 @@ def copy_inventory():
     run_command("cp -rfp inventory/sample inventory/mycluster")
 
 # Step 3: Generate hosts.yaml using Jinja2
-def generate_hosts_yaml(master_nodes, worker_nodes):
+def generate_hosts_yaml(master_nodes: dict, worker_nodes: dict):
     # Combine all nodes
     all_hosts = {**master_nodes, **worker_nodes}
 
     # Define the data structure for the template
     template_data = {
         "all_hosts": all_hosts,
-        "kube_control_plane_hosts": list(all_hosts.keys()),
+        "kube_control_plane_hosts": list(master_nodes.keys()),
         "kube_node_hosts": list(all_hosts.keys()),
-        "etcd_hosts": list(all_hosts.keys()),
+        "etcd_hosts": list(master_nodes.keys()),
     }
 
     # Load Jinja2 template
@@ -78,6 +78,13 @@ def generate_hosts_yaml(master_nodes, worker_nodes):
     output_path = os.path.join('inventory', 'mycluster', 'hosts.yaml')
     with open(output_path, 'w') as file:
         file.write(rendered_hosts_yaml)
+
+    # Ask the user if they want to edit the file
+    edit_choice = input(f"The hosts.yaml file has been generated at {output_path}. Do you want to edit it? (y/n): ")
+
+    if edit_choice.lower() == 'y':
+        subprocess.run(["nvim", output_path], check=True)
+        print(f"File {output_path} opened for editing in nvim.")
 
 # Step 4: Run Ansible Playbook
 def run_ansible_playbook():
