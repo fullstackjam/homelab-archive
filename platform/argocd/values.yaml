@@ -39,8 +39,7 @@ argocd-apps:
             revision: &revision master
             directories:
               - path: platform/*
-              - path: kustomize/*
-              # - path: apps/*
+              - path: apps/*
       template:
         metadata:
           name: '{{path.basename}}'
