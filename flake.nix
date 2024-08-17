@@ -70,6 +70,7 @@
             ZSH=$HOME/.oh-my-zsh
             if [ -d "$ZSH" ]; then
               export ZSH="$ZSH"
+              plugins=(git kubectl)
               source $ZSH/oh-my-zsh.sh
             fi
           '';
