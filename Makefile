@@ -4,7 +4,7 @@
 
 env ?= prod
 
-KUBECONFIG = $(shell pwd)/bootstrap/kubeconfig.yaml
+KUBECONFIG = $(shell pwd)/kubernetes/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 
 default: metal kubernetes infra platform external smoke-test
