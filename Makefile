@@ -5,7 +5,7 @@
 KUBECONFIG = $(shell pwd)/bootstrap/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 
-default: system platform
+default: platform
 
 configure:
 	./scripts/configure
