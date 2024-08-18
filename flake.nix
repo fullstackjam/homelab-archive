@@ -21,6 +21,7 @@
             ansible
             ansible-lint
             bmake
+            cilium-cli
             diffutils
             docker
             docker-compose_1 # TODO upgrade to version 2

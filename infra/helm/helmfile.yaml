@@ -1,9 +1,9 @@
 repositories:
   - name: metallb
     url: https://metallb.github.io/metallb
+
 ---
 releases:
-
   # Load balancer
   - name: metallb
     chart: metallb/metallb
