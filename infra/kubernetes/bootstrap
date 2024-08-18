@@ -114,7 +114,7 @@ def fetch_and_modify_admin_conf(master_nodes):
     control_plane_ip = master_nodes[control_plane]
 
     # Define the local path where the file will be saved
-    local_admin_conf = os.path.join(os.path.dirname(os.getcwd()), 'kubeconfig.yaml')
+    local_admin_conf = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), 'kubeconfig.yaml')
 
     # SCP command to copy the file
     scp_command = f"scp root@{control_plane_ip}:/etc/kubernetes/admin.conf {local_admin_conf}"

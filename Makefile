@@ -4,20 +4,14 @@
 
 env ?= prod
 
-KUBECONFIG = $(shell pwd)/kubernetes/kubeconfig.yaml
+KUBECONFIG = $(shell pwd)/infra/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 
-default: metal kubernetes infra platform external smoke-test
+default: infra platform external smoke-test
 
 configure:
 	./scripts/configure
 	git status
-
-metal:
-	make -C metal
-
-kubernetes:
-	make -C kubernetes
 
 infra:
 	make -C infra
@@ -55,4 +49,4 @@ clean:
 
 console:
 	ansible-console \
-		--inventory metal/inventories/${env}.yml
+		--inventory infra/metal/inventories/${env}.yml

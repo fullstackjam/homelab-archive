@@ -1,10 +1,10 @@
-.POSIX:
+.PHONY: bootstrap
 
-export KUBECONFIG = $(shell pwd)/kubeconfig.yaml
+env ?= prod
 
-default: boot
+all: bootstrap
 
-boot:
+bootstrap:
 	python3 bootstrap
 
 clean:

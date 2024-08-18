@@ -1,30 +1,20 @@
-.POSIX:
+.PHONY: all metal k8s helm
 
-export KUBECONFIG = $(shell pwd)/../kubernetes/kubeconfig.yaml
+default: metal k8s helm
 
-.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker patch-longhorn-service
+# metalialize the system using Ansible playbook
+metal:
+	make -C metal
 
-default: bootstrap patch-longhorn-service kustomize
+# Bootstrap Kubernetes cluster
+k8s:
+	cd kubernetes && python3 bootstrap
 
-helm-diff-check:
-	@helm plugin list | grep -q diff || helm plugin install https://github.com/databus23/helm-diff
+# Deploy Helm charts and Kustomize configurations
+helm:
+	make -C helm
 
-bootstrap: helm-diff-check
-	helmfile apply
-
-wait-metallb-speaker:
-	@echo "Checking if metallb-speaker Pods are ready..."
-	@kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s || true
-
-kustomize: wait-metallb-speaker
-	kubectl apply -k kustomize
-
-patch-longhorn-service:
-	@echo "Patching longhorn-frontend service to LoadBalancer..."
-	@kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
-
+# Clean up (if necessary)
 clean:
-	kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
-	helm uninstall longhorn -n longhorn-system
-	helm uninstall metallb -n metallb-system
-	kubectl delete ns longhorn-system metallb-system
+	# Add any clean up commands if needed
+	@echo "Clean up done."
