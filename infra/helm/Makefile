@@ -2,7 +2,7 @@
 
 export KUBECONFIG = $(shell pwd)/../kubeconfig.yaml
 
-.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker patch-longhorn-service
+.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker
 
 default: bootstrap kustomize
 
@@ -14,15 +14,11 @@ bootstrap: helm-diff-check
 
 wait-metallb-speaker:
 	@echo "Checking if metallb-speaker Pods exist and are ready..."
-	@kubectl get pod -l app.kubernetes.io/component=speaker -n metallb-system
+	@kubectl get pod -l app.kubernetes.io/component=speaker -n metallb-system > /dev/null 2>&1 || { echo "No metallb-speaker Pods found. Exiting..."; exit 1; }
 	@kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s
 
 kustomize: wait-metallb-speaker
 	kubectl apply -k kustomize
-
-patch-longhorn-service:
-	@echo "Patching longhorn-frontend service to LoadBalancer..."
-	@kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
 
 clean-helm:
 	helm uninstall metallb -n metallb-system
