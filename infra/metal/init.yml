@@ -2,3 +2,4 @@
   hosts: metal
   roles:
     - sysctl_tuning
+    - necessary_tools

@@ -13,8 +13,9 @@ bootstrap: helm-diff-check
 	helmfile apply
 
 wait-metallb-speaker:
-	@echo "Checking if metallb-speaker Pods are ready..."
-	@kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s || true
+	@echo "Checking if metallb-speaker Pods exist and are ready..."
+	@kubectl get pod -l app.kubernetes.io/component=speaker -n metallb-system
+	@kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s
 
 kustomize: wait-metallb-speaker
 	kubectl apply -k kustomize
