@@ -9,7 +9,7 @@ rook-ceph-cluster:
     mon:
       count: 3
     mgr:
-      count: 2
+      count: 3
     dashboard:
       ssl: false
     logCollector:
