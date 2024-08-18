@@ -4,7 +4,7 @@ env ?= prod
 
 default: boot init
 
-boot:
+boot: ~/.ssh/id_rsa
 	ansible-playbook \
 		--inventory inventories/${env}.yml \
 		boot.yml

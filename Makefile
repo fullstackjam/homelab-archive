@@ -45,7 +45,7 @@ test:
 	make -C test
 
 clean:
-	docker compose --project-directory ./metal/roles/pxe_server/files down
+	docker compose --project-directory ./infra/metal/roles/pxe_server/files down
 
 console:
 	ansible-console \
