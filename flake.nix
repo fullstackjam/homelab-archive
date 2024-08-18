@@ -51,6 +51,7 @@
               ansible
               mkdocs-material
               netaddr
+              pip
               jsonschema
               jmespath
               pexpect
