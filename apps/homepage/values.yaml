@@ -103,7 +103,7 @@ app-template:
                 description: Git forge
                 icon: gitea.svg
             - ArgoCD:
-                href: https://argocd.fullstackjam.org
+                href: https://cd.fullstackjam.org
                 description: Continuous deployment
                 icon: argocd.svg
             - Registry:
