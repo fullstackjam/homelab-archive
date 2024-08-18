@@ -4,7 +4,7 @@ export KUBECONFIG = $(shell pwd)/../kubeconfig.yaml
 
 .PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker patch-longhorn-service
 
-default: bootstrap patch-longhorn-service kustomize
+default: bootstrap kustomize
 
 helm-diff-check:
 	@helm plugin list | grep -q diff || helm plugin install https://github.com/databus23/helm-diff
@@ -25,7 +25,5 @@ patch-longhorn-service:
 	@kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
 
 clean-helm:
-	kubectl -n longhorn-system patch -p '{"value": "true"}' --type=merge lhs deleting-confirmation-flag
-	helm uninstall longhorn -n longhorn-system
 	helm uninstall metallb -n metallb-system
-	kubectl delete ns longhorn-system metallb-system
+	kubectl delete ns metallb-system
