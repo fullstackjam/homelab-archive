@@ -1,4 +1,6 @@
 cilium_kube_proxy_replacement: strict
+cilium_l2announcements:
+  - cidr: 192.168.2.180/29
 
 cilium_enable_hubble: true
 cilium_enable_hubble_metrics: true

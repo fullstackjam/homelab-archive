@@ -1,14 +1,14 @@
 all:
   vars:
-    control_plane_endpoint: 192.168.2.55
+    control_plane_endpoint: 192.168.2.120
     load_balancer_ip_pool:
       - 192.168.2.160/27
 metal:
   children:
     masters:
       hosts:
-        homelab-5: {ansible_host: 192.168.2.55, mac: '48:f3:17:15:00:64', disk: nvme0n1, network_interface: enp1s0}
+        homelab-120: {ansible_host: 192.168.2.120, mac: '48:f3:17:15:00:64', disk: nvme0n1, network_interface: enp1s0}
     workers:
       hosts:
-        homelab-6: {ansible_host: 192.168.2.56, mac: '48:f3:17:15:00:08', disk: nvme0n1, network_interface: enp1s0}
-        homelab-7: {ansible_host: 192.168.2.57, mac: '48:f3:17:14:ff:b4', disk: nvme0n1, network_interface: enp1s0}
+        homelab-121: {ansible_host: 192.168.2.121, mac: '48:f3:17:15:00:08', disk: nvme0n1, network_interface: enp1s0}
+        homelab-122: {ansible_host: 192.168.2.122, mac: '48:f3:17:14:ff:b4', disk: nvme0n1, network_interface: enp1s0}

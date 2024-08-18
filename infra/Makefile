@@ -1,6 +1,6 @@
 .PHONY: all metal k8s helm
 
-default: metal k8s helm
+default: metal k8s
 
 # metalialize the system using Ansible playbook
 metal:
