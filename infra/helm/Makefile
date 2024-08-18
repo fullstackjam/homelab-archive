@@ -16,11 +16,17 @@ install-metallb:
 	@helmfile apply
 
 wait-metallb-speaker:
-	@echo "Waiting for 10 seconds to allow metallb-speaker Pods to initialize..."
-	@sleep 10
-	@echo "Checking if metallb-speaker Pods exist and are ready..."
-	@kubectl get pod -l app.kubernetes.io/component=speaker -n metallb-system > /dev/null 2>&1 || { echo "No metallb-speaker Pods found. Exiting..."; exit 1; }
-	@kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s || (echo "MetalLB speaker Pods are not ready"; exit 1)
+	@echo "Waiting for metallb-speaker Pods to be created and initialized..."
+	@for i in {1..30}; do \
+		if kubectl get pod -l app.kubernetes.io/component=speaker -n metallb-system > /dev/null 2>&1; then \
+			echo "MetalLB speaker Pods found. Checking if they are ready..."; \
+			kubectl wait --for=condition=Ready pod -l app.kubernetes.io/component=speaker -n metallb-system --timeout=300s; \
+			break; \
+		else \
+			echo "No metallb-speaker Pods found. Retrying in 10 seconds..."; \
+			sleep 10; \
+		fi; \
+	done
 
 kustomize: wait-metallb-speaker
 	kubectl apply -k kustomize
