@@ -2,9 +2,9 @@
 
 export KUBECONFIG = $(shell pwd)/../kubeconfig.yaml
 
-.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker install-helmfile patch_hubble_ui
+.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker install-helmfile patch_svc
 
-default: bootstrap kustomize patch_hubble_ui
+default: bootstrap kustomize patch_svc
 
 helm-diff-check:
 	@helm plugin list | grep -q diff || helm plugin install https://github.com/databus23/helm-diff
@@ -22,8 +22,9 @@ wait-metallb-speaker:
 kustomize: wait-metallb-speaker
 	kubectl apply -k kustomize
 
-patch_hubble_ui:
+patch_svc:
 	kubectl patch svc hubble-ui -n kube-system -p '{"spec": {"type": "LoadBalancer"}}'
+	kubectl patch svc longhorn-frontend -n longhorn-system -p '{"spec": {"type": "LoadBalancer"}}'
 
 clean-helm:
 	helm uninstall metallb -n metallb-system

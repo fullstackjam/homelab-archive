@@ -118,7 +118,7 @@ def run_ansible_playbook():
     if not is_kubernetes_running():
         print("Running Ansible Playbook to deploy Kubernetes...")
         subprocess.run(["ansible-playbook", "-i", "inventory/mycluster/hosts.yaml",
-                        "-e", "kube_network_plugin=cilium", "-e", "enable_nodelocaldns=false", "--become", "--become-user=root", "-f", "20", "cluster.yml", "-v"])
+                        "-e", "kube_network_plugin=cilium", "--become", "--become-user=root", "-f", "20", "cluster.yml", "-v"])
     else:
         print("Skipping Ansible Playbook as Kubernetes is already deployed.")
 
