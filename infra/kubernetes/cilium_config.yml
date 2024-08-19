@@ -1,5 +1,3 @@
-cilium_kube_proxy_replacement: strict
-
 cilium_enable_hubble: true
 cilium_enable_hubble_metrics: true
 cilium_hubble_metrics:
