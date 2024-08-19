@@ -2,17 +2,17 @@
 
 export KUBECONFIG = $(shell pwd)/../kubeconfig.yaml
 
-.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker install-metallb patch_hubble_ui
+.PHONY: default bootstrap kustomize helm-diff-check wait-metallb-speaker install-helmfile patch_hubble_ui
 
 default: bootstrap kustomize patch_hubble_ui
 
 helm-diff-check:
 	@helm plugin list | grep -q diff || helm plugin install https://github.com/databus23/helm-diff
 
-bootstrap: helm-diff-check install-metallb
+bootstrap: helm-diff-check install-helmfile
 
-install-metallb:
-	@echo "Installing MetalLB..."
+install-helmfile:
+	@echo "Installing Helmfile..."
 	@helmfile apply
 
 wait-metallb-speaker:

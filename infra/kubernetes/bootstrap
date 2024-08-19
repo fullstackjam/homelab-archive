@@ -83,8 +83,8 @@ def generate_hosts_yaml(master_nodes: dict, worker_nodes: dict):
     edit_choice = input(f"The hosts.yaml file has been generated at {output_path}. Do you want to edit it? (y/n): ")
 
     if edit_choice.lower() == 'y':
-        subprocess.run(["nvim", output_path], check=True)
-        print(f"File {output_path} opened for editing in nvim.")
+        subprocess.run(["vim", output_path], check=True)
+        print(f"File {output_path} opened for editing in vim.")
 
 def update_cilium_config():
     config_file_path = "../cilium_config.yml"

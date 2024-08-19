@@ -1,4 +1,4 @@
-module git.fullstackjam.org/khuedoan/homelab/platform/secret-generator
+module git.fullstackjam.dev/khuedoan/homelab/platform/secret-generator
 
 go 1.19
 

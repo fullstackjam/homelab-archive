@@ -13,7 +13,7 @@ kube-prometheus-stack:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
       hosts:
-        - &host grafana.fullstackjam.org
+        - &host grafana.fullstackjam.dev
       tls:
         - secretName: grafana-general-tls
           hosts:

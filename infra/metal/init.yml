@@ -2,4 +2,3 @@
   hosts: metal
   roles:
     - sysctl_tuning
-    - automatic_upgrade

@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: cd.fullstackjam.org
+    domain: argocd.fullstackjam.dev
   configs:
     params:
       server.insecure: true

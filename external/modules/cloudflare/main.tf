@@ -1,5 +1,5 @@
 data "cloudflare_zone" "zone" {
-  name = "fullstackjam.org"
+  name = "fullstackjam.dev"
 }
 
 data "cloudflare_api_token_permission_groups" "all" {}
