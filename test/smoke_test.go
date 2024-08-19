@@ -20,7 +20,8 @@ func TestSmoke(t *testing.T) {
 	}{
 		{"argocd-server", "argocd"},
 		{"gitea", "gitea"},
-		{"grafana", "grafana"},
+		{"monitoring-system-grafana", "monitoring-system"},
+		{"speedtest", "speedtest"},
 		{"homepage", "homepage"},
 	}
 
