@@ -17,4 +17,4 @@ repositories:
     private: false
     migrate:
       source: https://github.com/fullstackjam/homelab
-      mirror: false
+      mirror: true
