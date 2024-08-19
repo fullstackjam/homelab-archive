@@ -1,31 +1,12 @@
 kube-prometheus-stack:
   grafana:
-    enabled: true
+    enabled: false
     forceDeployDatasources: true
     forceDeployDashboards: true
     additionalDataSources:
       - name: Loki
         type: loki
         url: http://loki.loki:3100
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-      hosts:
-        - &host grafana.fullstackjam.dev
-      tls:
-        - secretName: grafana-general-tls
-          hosts:
-            - *host
-    persistence:
-      enabled: true
-      type: sts
-      accessModes:
-        - ReadWriteOnce
-      size: 20Gi
-      finalizers:
-        - kubernetes.io/pvc-protection
   prometheus:
     prometheusSpec:
       ruleSelectorNilUsesHelmValues: false
