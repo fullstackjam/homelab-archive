@@ -29,7 +29,7 @@ harbor:
         secretName: "harbor-general-tls"
     ingress:
       hosts:
-        core: core.harbor.domain
+        core: harbor.fullstackjam.dev
       # set to the type of ingress controller if it has specific requirements.
       # leave as `default` for most ingress controllers.
       # set to `gce` if using the GCE ingress controller
@@ -47,6 +47,7 @@ harbor:
         ingress.kubernetes.io/proxy-body-size: "0"
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
         nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        cert-manager.io/cluster-issuer: letsencrypt-prod
       # ingress-specific labels
       labels: {}
     clusterIP:
