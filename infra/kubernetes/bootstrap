@@ -20,6 +20,7 @@ def run_command(command):
 def pull_kubespray():
     if os.path.exists("kubespray"):
         os.chdir("kubespray")
+        run_command("git config pull.rebase true")
         run_command("git pull --depth=1")
     else:
         run_command("git clone --depth=1 https://github.com/kubernetes-sigs/kubespray.git")
