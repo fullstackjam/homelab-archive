@@ -1,0 +1,144 @@
+#!/usr/bin/env python
+
+"""
+Quick and dirty script for things that I can't/don't have time to do properly yet
+TODO: retire this script
+"""
+
+import base64
+import json
+import json
+import pexpect
+import requests
+import subprocess
+import sys
+import urllib
+
+from rich.console import Console
+from kubernetes import client, config
+from kubernetes.stream import stream
+
+# https://git.khuedoan.com/user/settings/applications
+# Doing this properly inside the cluster requires:
+# - Kubernetes service account
+config.load_config()
+
+gitea_host = client.NetworkingV1Api().read_namespaced_ingress('gitea', 'gitea').spec.rules[0].host
+gitea_user_secret = client.CoreV1Api().read_namespaced_secret('gitea-admin-secret', 'gitea')
+gitea_user = base64.b64decode(gitea_user_secret.data['username']).decode("utf-8")
+gitea_pass = base64.b64decode(gitea_user_secret.data['password']).decode("utf-8")
+gitea_url = f"http://{gitea_host}"
+
+
+def apply_secret(name: str, namespace: str, data: dict) -> None:
+    try:
+        client.CoreV1Api().read_namespaced_secret(name, namespace)
+        patch_body = client.V1Secret(
+            metadata=client.V1ObjectMeta(name=name),
+            data=data,
+        )
+        client.CoreV1Api().replace_namespaced_secret(name, namespace, patch_body)
+    except client.exceptions.ApiException:
+        # Secret doesn't exist, create a new one
+        new_secret = client.V1Secret(
+            metadata=client.V1ObjectMeta(name=name),
+            data=data,
+        )
+        client.CoreV1Api().create_namespaced_secret(namespace, new_secret)
+
+def setup_gitea_access_token(name: str, scopes: list[str]) -> None:
+    current_tokens = requests.get(
+        url=f"{gitea_url}/api/v1/users/{gitea_user}/tokens",
+        auth=(gitea_user,gitea_pass),
+    ).json()
+
+    if not any(token['name'] == name for token in current_tokens):
+        resp = requests.post(
+            url=f"{gitea_url}/api/v1/users/{gitea_user}/tokens",
+            auth=(gitea_user,gitea_pass),
+            headers={
+                'Content-Type': 'application/json'
+            },
+            data=json.dumps({
+                'name': name,
+                'scopes': scopes
+            })
+        )
+
+        if resp.status_code == 201:
+            apply_secret(
+                f"gitea.{name}",
+                "global-secrets",
+                {
+                    'token': base64.b64encode(resp.json()['sha1'].encode("utf-8")).decode("utf-8")
+                }
+            )
+        else:
+            print(f"Error creating access token {name} ({resp.status_code})")
+            print(resp.content)
+            sys.exit(1)
+
+def setup_gitea_oauth_app(name: str, redirect_uri: str) -> None:
+    # TODO use the new global application, while it's there in the UI, there's no API yet.
+    current_apps = requests.get(
+        url=f"{gitea_url}/api/v1/user/applications/oauth2",
+        auth=(gitea_user,gitea_pass),
+    ).json()
+
+    if not any(app['name'] == name for app in current_apps):
+        resp = requests.post(
+            url=f"{gitea_url}/api/v1/user/applications/oauth2",
+            auth=(gitea_user,gitea_pass),
+            headers={
+                'Content-Type': 'application/json'
+            },
+            data=json.dumps({
+                'name': name,
+                'redirect_uris': [redirect_uri],
+                'confidential_client': True
+            })
+        )
+
+        if resp.status_code == 201:
+            apply_secret(
+                f"gitea.{name}",
+                "global-secrets",
+                {
+                    'client_id': base64.b64encode(resp.json()['client_id'].encode("utf-8")).decode("utf-8"),
+                    'client_secret': base64.b64encode(resp.json()['client_secret'].encode("utf-8")).decode("utf-8"),
+                }
+            )
+        else:
+            print(f"Error creating OAuth application {name} ({resp.status_code})")
+            print(resp.content)
+            sys.exit(1)
+
+
+def main() -> None:
+    with Console().status("Completing the remaining sorcery"):
+        gitea_access_tokens = [
+            {
+                'name': 'renovate',
+                'scopes': [
+                    "write:repository",
+                    "read:user",
+                    "write:issue",
+                    "read:organization",
+                    "read:misc"
+                ]
+            }
+        ]
+
+        gitea_oauth_apps = [
+            {'name': 'woodpecker', 'redirect_uri': f"https://{client.NetworkingV1Api().read_namespaced_ingress('woodpecker-server', 'woodpecker').spec.rules[0].host}/authorize"},
+        ]
+
+
+        for token in gitea_access_tokens:
+            setup_gitea_access_token(token['name'], token['scopes'])
+
+        for app in gitea_oauth_apps:
+            setup_gitea_oauth_app(app['name'], app['redirect_uri'])
+
+if __name__ == '__main__':
+    main()
