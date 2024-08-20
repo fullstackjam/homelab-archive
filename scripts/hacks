@@ -116,26 +116,9 @@ def setup_gitea_oauth_app(name: str, redirect_uri: str) -> None:
 
 def main() -> None:
     with Console().status("Completing the remaining sorcery"):
-        gitea_access_tokens = [
-            {
-                'name': 'renovate',
-                'scopes': [
-                    "write:repository",
-                    "read:user",
-                    "write:issue",
-                    "read:organization",
-                    "read:misc"
-                ]
-            }
-        ]
-
         gitea_oauth_apps = [
             {'name': 'woodpecker', 'redirect_uri': f"https://{client.NetworkingV1Api().read_namespaced_ingress('woodpecker-server', 'woodpecker').spec.rules[0].host}/authorize"},
         ]
-
-
-        for token in gitea_access_tokens:
-            setup_gitea_access_token(token['name'], token['scopes'])
 
         for app in gitea_oauth_apps:
             setup_gitea_oauth_app(app['name'], app['redirect_uri'])
