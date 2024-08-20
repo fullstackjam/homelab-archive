@@ -7,7 +7,7 @@ env ?= prod
 KUBECONFIG = $(shell pwd)/infra/kubeconfig.yaml
 KUBE_CONFIG_PATH = $(KUBECONFIG)
 
-default: infra platform external smoke-test
+default: infra platform external smoke-test post-install
 
 configure:
 	./scripts/configure
@@ -24,6 +24,9 @@ external:
 
 smoke-test:
 	make -C test filter=Smoke
+
+post-install:
+	@./scripts/hacks
 
 tools:
 	@docker run \
@@ -43,9 +46,6 @@ tools:
 
 test:
 	make -C test
-
-clean:
-	docker compose --project-directory ./infra/metal/roles/pxe_server/files down
 
 console:
 	ansible-console \
