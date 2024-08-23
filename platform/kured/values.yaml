@@ -1,0 +1,5 @@
+kured:
+  configuration:
+    annotateNodes: true
+    rebootSentinelCommand: sh -c "! [ -f /var/run/reboot-required ]"
+    timeZone: Asia/Shanghai
