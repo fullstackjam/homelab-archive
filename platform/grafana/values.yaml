@@ -23,5 +23,5 @@ grafana:
   persistence:
     enabled: true
     accessModes:
-      - ReadWriteMany
+      - ReadWriteOnce
     size: 2Gi
