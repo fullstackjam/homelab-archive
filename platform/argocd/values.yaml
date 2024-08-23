@@ -5,11 +5,13 @@ argo-cd:
     params:
       server.insecure: true
       controller.diff.server.side: true
+      syncWave: -1
     cm:
       resource.ignoreResourceUpdatesEnabled: true
       resource.customizations.ignoreResourceUpdates.all: |
         jsonPointers:
           - /status
+        timeout: 600s
   server:
     ingress:
       enabled: true
@@ -66,3 +68,4 @@ argocd-apps:
               - CreateNamespace=true
               - ApplyOutOfSyncOnly=true
               - ServerSideApply=true
+              - PruneLast=true
