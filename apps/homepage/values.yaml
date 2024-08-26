@@ -54,49 +54,53 @@ app-template:
           theme: dark
           headerStyle: boxed
           hideVersion: true
+          providers:
+            longhorn:
+              url: http://192.168.2.161
         widgets.yaml: |
           - search:
               provider: google
               target: _blank
+          - longhorn:
+              # Show the expanded view
+              expanded: true
+              # Shows a node representing the aggregate values
+              total: true
+              # Shows the node names as labels
+              labels: true
+              # Show the nodes
+              nodes: true
+              # An explicit list of nodes to show. All are shown by default if "nodes" is true
+              include:
+                - node1
+                - node2
+          - kubernetes:
+              cluster:
+                # Shows cluster-wide statistics
+                show: true
+                # Shows the aggregate CPU stats
+                cpu: true
+                # Shows the aggregate memory stats
+                memory: true
+                # Shows a custom label
+                showLabel: true
+                label: "cluster"
+              nodes:
+                # Shows node-specific statistics
+                show: true
+                # Shows the CPU for each node
+                cpu: true
+                # Shows the memory for each node
+                memory: true
+                # Shows the label, which is always the node name
+                showLabel: true
         services.yaml: |
           - Popular:
             - Matrix:
                 href: https://chat.fullstackjam.dev
                 description: Chat client
                 icon: element.svg
-            - Jellyfin:
-                href: https://jellyfin.fullstackjam.dev
-                description: Media system (movies, music, etc.)
-                icon: jellyfin.svg
-            - Jellyseerr:
-                href: https://jellyseerr.fullstackjam.dev
-                description: Request media
-                icon: jellyseerr.svg
-            - Paperless:
-                href: https://paperless.fullstackjam.dev
-                description: Document management system
-                icon: paperless.svg
           - Management:
-            - Transmission:
-                href: https://transmission.fullstackjam.dev
-                description: Bittorrent client
-                icon: transmission.svg
-            - Prowlarr:
-                href: https://prowlarr.fullstackjam.dev
-                description: Indexer manager
-                icon: prowlarr.svg
-            - Radarr:
-                href: https://radarr.fullstackjam.dev
-                description: Movie manager
-                icon: radarr.svg
-            - Sonarr:
-                href: https://sonarr.fullstackjam.dev
-                description: TV show manager
-                icon: sonarr.svg
-            - Kanidm:
-                href: https://auth.fullstackjam.dev
-                description: Identity management
-                icon: https://auth.fullstackjam.dev/pkg/img/logo-square.svg
           - Development:
             - Gitea:
                 href: https://git.fullstackjam.dev
@@ -129,7 +133,7 @@ app-template:
               - href: https://homelab.fullstackjam.dev
                 icon: google-docs.svg
             - Public homelab repository:
-              - href: https://github.com/khuedoan/homelab
+              - href: https://github.com/fullstackjam/homelab
                 icon: github.svg
           - Managed services:
             - Cloudflare:
@@ -140,14 +144,11 @@ app-template:
                 icon: terraform.svg
           - Infrastructure:
             - Router:
-              - href: https://192.168.1.1
+              - href: https://192.168.2.1
                 icon: router.svg
             - Proxmox:
               - href: https://proxmox:8006
                 icon: proxmox.svg
-            - Google Cloud:
-              - href: https://console.cloud.google.com
+            - Aliyun:
+              - href: https://home.console.aliyun.com/
                 icon: google-cloud-platform.svg
-            - Oracle Cloud:
-              - href: https://cloud.oracle.com
-                icon: oracle-cloud.svg
