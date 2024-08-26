@@ -83,7 +83,7 @@ app-template:
                 description: Continuous deployment
                 icon: argocd.svg
             - Registry:
-                href: https://registry.fullstackjam.dev
+                href: https://harbor.fullstackjam.dev
                 description: Container registry
                 icon: docker.svg
             - Grafana:
