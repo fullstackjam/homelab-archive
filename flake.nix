@@ -43,7 +43,7 @@
             p7zip
             pre-commit
             shellcheck
-            terraform
+            tenv
             yamllint
             yq
             (python3.withPackages (p: with p; [

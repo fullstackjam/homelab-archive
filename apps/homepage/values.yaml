@@ -116,7 +116,7 @@ app-template:
                 icon: terraform.svg
           - Infrastructure:
             - Router:
-              - href: https://192.168.2.1
+              - href: https://openwrt
                 icon: router.svg
             - Proxmox:
               - href: https://proxmox:8006
