@@ -146,7 +146,7 @@ harbor:
           existingClaim: ""
           storageClass: ""
           subPath: ""
-          accessMode: ReadWriteMany
+          accessMode: ReadWriteOnce
           size: 1Gi
           annotations: {}
       # If external database is used, the following settings for database will

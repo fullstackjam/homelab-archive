@@ -17,8 +17,6 @@ grafana:
     datasources:
       enabled: true
       searchNamespace: monitoring-system
-  deploymentStrategy:
-    type: Recreate
   grafana.ini:
     server:
       root_url: https://grafana.fullstackjam.dev
@@ -27,3 +25,4 @@ grafana:
     accessModes:
       - ReadWriteOnce
     size: 2Gi
+  useStatefulSet: True
