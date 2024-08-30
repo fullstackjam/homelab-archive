@@ -1,0 +1,13 @@
+uptime-kuma:
+  ingress:
+    enabled: true
+    hosts:
+      - host: &host uptime-kuma.fullstackjam.dev
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+      - hosts:
+          - *host
+        secretName: uptime-kuma-tls-certificate
+  serviceMonitor:
+    enabled: true
