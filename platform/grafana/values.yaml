@@ -25,4 +25,3 @@ grafana:
     accessModes:
       - ReadWriteOnce
     size: 2Gi
-  useStatefulSet: True
