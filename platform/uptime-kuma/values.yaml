@@ -1,6 +1,7 @@
 uptime-kuma:
   ingress:
     enabled: true
+    className: nginx
     hosts:
       - host: &host uptime-kuma.fullstackjam.dev
     annotations:
