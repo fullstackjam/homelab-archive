@@ -4,6 +4,9 @@ uptime-kuma:
     className: nginx
     hosts:
       - host: &host uptime-kuma.fullstackjam.dev
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
     tls:
