@@ -20,6 +20,4 @@ grafana:
   grafana.ini:
     server:
       root_url: https://grafana.fullstackjam.dev
-  persistence:
-    enabled: true
-    size: 2Gi
+  useStatefulSet: True
