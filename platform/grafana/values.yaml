@@ -20,6 +20,7 @@ grafana:
   grafana.ini:
     server:
       root_url: https://grafana.fullstackjam.dev
+  replicas: 3
   persistence:
     enabled: true
     type: pvc
