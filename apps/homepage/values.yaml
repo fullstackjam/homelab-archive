@@ -71,7 +71,7 @@ app-template:
               include:
                 - homelab-5
                 - homelab-6
-                - homelab-7
+                - homelab-0
         services.yaml: |
           - Development:
             - Gitea:

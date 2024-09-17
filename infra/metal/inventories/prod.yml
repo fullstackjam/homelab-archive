@@ -11,5 +11,4 @@ metal:
     workers:
       hosts:
         homelab-6: {ansible_host: 192.168.2.56, mac: '48:f3:17:15:00:08', disk: nvme0n1, network_interface: enp1s0}
-        homelab-7: {ansible_host: 192.168.2.57, mac: '48:f3:17:14:ff:b4', disk: nvme0n1, network_interface: enp1s0}
         homelab-0: {ansible_host: 192.168.2.50, mac: 'e0:51:d8:10:40:46', disk: nvme0n1, network_interface: enp3s0}
